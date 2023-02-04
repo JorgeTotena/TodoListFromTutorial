@@ -41,10 +41,30 @@ def add():
     content = self.text.get(1.0, END)
     # Here we're inserting it into the listbox
     self.main_text.insert(END, content)
-    #Opening the file 
+    #Opening the file and adding the content
     with open('data.txt', "a") as file:
         file.write(content)
+        #Offset to the beginning of the file at "0"
+        file.seek(0)
+        file.close()
+    #Clears the text of the input box after you do the input process
+    self.text.delete(1, 0, END)
     
+def delete_():
+    #Selects what I'm currently clicking with my mouse
+    delete = self.main_text.curselection()
+    #What's on the seleccion?
+    look = self.main.text.get(delete_)
+    with open('data.txt', 'r+') as f:
+        new_f = f.readlines()
+        f.seek(0)
+        for line in new_f:
+            item = str(look)
+            # if the item that i selected is not within the lines, then it will
+            # rewrite the lines with the ones that should not be deleted
+            if item not in line:
+                f.write(line)
+        f.truncate()
 def main():
     # defines the main window of the program
     root = Tk()
@@ -53,3 +73,13 @@ def main():
     
 if __name__ =="__main__":
     main()
+    
+    
+    
+''' seek(0) is a method in Python's file object that sets the current file position to the offset 0. This means that the next read or write operation will take place at the beginning of the file. The seek method takes two arguments: the offset, and the reference point from which the offset is calculated. In this case,
+the offset is 0 and the reference point is the beginning of the file, 
+which is specified using the whence parameter and is set to 0.
+
+The readlines() method in Python is a function of file objects that reads the 
+entire contents of a file and returns it as a list of strings, 
+where each element in the list is a single line from the file. '''
