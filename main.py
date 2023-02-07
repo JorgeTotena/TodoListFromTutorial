@@ -30,41 +30,54 @@ class todo:
         self.text.place(x=20, y=120)
     
     #===============================ADD TASK ============================= #
+        
+        def add():
+            # The get method retrieves the text contained within the widget. It takes two arguments:
+            # 1.0 and END. These arguments specify the range of text to retrieve, where 
+            # 1.0 represents the first character of the first line and END represents 
+            # the end of the text in the widget.
+            content = self.text.get(1.0, END)
+            # Here we're inserting it into the listbox
+            self.main_text.insert(END, content)
+            #Opening the file and adding the content
+            with open('data.txt', "a") as file:
+                file.write(content)
+                #Offset to the beginning of the file at "0"
+                file.seek(0)
+                file.close()
+            #Clears the text of the input box after you do the input process
+            self.text.delete(1, 0, END)
+        
+        def delete_():
+            #Selects what I'm currently clicking with my mouse
+            delete = self.main_text.curselection()
+            #What's on the seleccion?
+            look = self.main.text.get(delete_)
+            with open('data.txt', 'r+') as f:
+                new_f = f.readlines()
+                f.seek(0)
+                for line in new_f:
+                    item = str(look)
+                    # if the item that i selected is not within the lines, then it will
+                    # rewrite the lines with the ones that should not be deleted
+                    if item not in line:
+                        f.write(line)
+                # Eliminates anything that was not rewritten
+                f.truncate()
+            #Call the function and deletes what it's stored within delete_
+            self.main_text.delete(delete_)
     
-    #
-    
-def add():
-    # The get method retrieves the text contained within the widget. It takes two arguments:
-    # 1.0 and END. These arguments specify the range of text to retrieve, where 
-    # 1.0 represents the first character of the first line and END represents 
-    # the end of the text in the widget.
-    content = self.text.get(1.0, END)
-    # Here we're inserting it into the listbox
-    self.main_text.insert(END, content)
-    #Opening the file and adding the content
-    with open('data.txt', "a") as file:
-        file.write(content)
-        #Offset to the beginning of the file at "0"
-        file.seek(0)
-        file.close()
-    #Clears the text of the input box after you do the input process
-    self.text.delete(1, 0, END)
-    
-def delete_():
-    #Selects what I'm currently clicking with my mouse
-    delete = self.main_text.curselection()
-    #What's on the seleccion?
-    look = self.main.text.get(delete_)
-    with open('data.txt', 'r+') as f:
-        new_f = f.readlines()
-        f.seek(0)
-        for line in new_f:
-            item = str(look)
-            # if the item that i selected is not within the lines, then it will
-            # rewrite the lines with the ones that should not be deleted
-            if item not in line:
-                f.write(line)
-        f.truncate()
+        with open('data.txt', 'r') as file:
+            read = file.readlines()
+            for i in read:
+                ready = i.split()
+                self.main_text.insert(END, ready)
+            file.close()
+        self.button = Button(self.root, text="Add", font='sarif, 20 bold italic', width=10, bd=5, bg='SkyBLue2', fg='black', command=add)
+        self.button.place(x=30, y=180)
+        self.button2 = Button(self.root, text="Delete", font='sarif, 20 bold italic', width=10, bd=5, bg='SkyBLue2', fg='black', command=delete_)
+        self.button2.place(x=30, y=280)
+        
 def main():
     # defines the main window of the program
     root = Tk()
@@ -73,8 +86,6 @@ def main():
     
 if __name__ =="__main__":
     main()
-    
-    
     
 ''' seek(0) is a method in Python's file object that sets the current file position to the offset 0. This means that the next read or write operation will take place at the beginning of the file. The seek method takes two arguments: the offset, and the reference point from which the offset is calculated. In this case,
 the offset is 0 and the reference point is the beginning of the file, 
